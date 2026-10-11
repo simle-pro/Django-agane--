@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список групп</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'student_list' %}">Студенты</a>
+        <a href="{% url 'group_list' %}" class="active">Группы</a>
+    </nav>
+
+    <div class="container">
+        <h1>Список учебных групп</h1>
+        <a href="{% url 'group_create' %}" class="btn">+ Создать группу</a>
+
+        <ul class="custom-list">
+            {% for group in groups %}
+                <li>
+                    <div>
+                        <a href="{% url 'group_detail' group.pk %}" style="text-decoration: none; color: var(--primary-color); font-weight: bold; font-size: 1.1rem;">
+                            {{ group.name }}
+                        </a>
+                        <div style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">
+                            Аудитория: {{ group.room }} | Средняя оценка: <strong>{% if group.average_grade %}{{ group.average_grade|floatformat:1 }}{% else %}нет оценок{% endif %}</strong>
+                        </div>
+                    </div>
+                    <div class="list-actions">
+                        <a href="{% url 'group_update' group.pk %}" class="btn btn-secondary" style="padding: 0.3rem 0.7rem; font-size: 0.8rem;">Изменить</a>
+                        <form action="{% url 'group_delete' group.pk %}" method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.7rem; font-size: 0.8rem;" onclick="return confirm('Удалить группу и всех её студентов?');">Удалить</button>
+                        </form>
+                    </div>
+                </li>
+            {% empty %}
+                <li style="justify-content: center; color: #64748b;">Групп пока нет</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

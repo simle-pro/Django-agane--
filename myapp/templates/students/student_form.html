@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if student %}Редактировать студента{% else %}Добавить студента{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'student_list' %}">Студенты</a>
+        <a href="{% url 'group_list' %}">Группы</a>
+    </nav>
+
+    <div class="container">
+        <h1>{% if student %}Редактировать студента{% else %}Добавить студента{% endif %}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <label>Имя:</label>
+            <input type="text" name="first_name" value="{{ student.first_name }}" placeholder="Введите имя" required>
+
+            <label>Фамилия:</label>
+            <input type="text" name="last_name" value="{{ student.last_name }}" placeholder="Введите фамилию" required>
+
+            <label>Возраст:</label>
+            <input type="number" name="age" value="{{ student.age }}" placeholder="Возраст (не менее 16)" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" value="{{ student.email }}" placeholder="example@mail.com" required>
+
+            <label>Телефон:</label>
+            <input type="text" name="phone" value="{{ student.phone }}" placeholder="+992..." required>
+
+            <label>Оценка:</label>
+            <input type="number" step="0.1" name="grade" value="{{ student.grade }}" placeholder="Например: 85.5" required>
+
+            <label>Группа:</label>
+            <select name="group" required>
+                {% for group in groups %}
+                    <option value="{{ group.id }}" {% if student.group.id == group.id %}selected{% endif %}>
+                        {{ group.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Сохранить студента</button>
+        </form>
+
+        <a href="{% url 'student_list' %}" class="back-link">← Назад к списку студентов</a>
+    </div>
+</body>
+</html>

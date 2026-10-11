@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Детали студента</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'student_list' %}" class="active">Студенты</a>
+        <a href="{% url 'group_list' %}">Группы</a>
+    </nav>
+
+    <div class="container">
+        <h1>Информация о студенте</h1>
+        <p><strong>Имя:</strong> {{ student.first_name }}</p>
+        <p><strong>Фамилия:</strong> {{ student.last_name }}</p>
+        <p><strong>Возраст:</strong> {{ student.age }}</p>
+        <p><strong>Email:</strong> {{ student.email }}</p>
+        <p><strong>Телефон:</strong> {{ student.phone }}</p>
+        <p><strong>Оценка:</strong> {{ student.grade }}</p>
+        <p><strong>Группа:</strong> {{ student.group.name }}</p>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="{% url 'student_update' student.pk %}" class="btn btn-secondary">Редактировать</a>
+            
+            <form action="{% url 'student_delete' student.pk %}" method="post" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Точно удалить студента?');">Удалить</button>
+            </form>
+        </div>
+
+        <a href="{% url 'student_list' %}" class="back-link">← Назад к списку студентов</a>
+    </div>
+</body>
+</html>

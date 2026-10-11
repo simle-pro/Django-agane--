@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Группа: {{ group.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'student_list' %}">Студенты</a>
+        <a href="{% url 'group_list' %}" class="active">Группы</a>
+    </nav>
+
+    <div class="container">
+        <h1>Группа: {{ group.name }}</h1>
+        <p><strong>Аудитория:</strong> {{ group.room }}</p>
+        <p><strong>Дата создания:</strong> {{ group.start_date }}</p>
+        <p><strong>Общая средняя оценка:</strong> {% if group.average_grade %}{{ group.average_grade|floatformat:1 }}{% else %}нет оценок{% endif %}</p>
+
+        <h3>Студенты этой группы:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ФИО студента</th>
+                    <th>Оценка</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in group.student_set.all %}
+                    <tr>
+                        <td>{{ student.first_name }} {{ student.last_name }}</td>
+                        <td>{{ student.grade }}</td>
+                        <td>
+                            <a href="{% url 'student_detail' student.pk %}" class="btn" style="padding: 0.2rem 0.6rem; font-size: 0.8rem;">Детали</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #64748b;">В этой группе пока нет студентов.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{% url 'group_list' %}" class="back-link">← Назад к списку групп</a>
+    </div>
+</body>
+</html>
