@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Avg
 from .models import *
 
-
+    
 def group_list(request):
     groups = Group.objects.annotate(average_grade=Avg('student__grade'))
     return render(request, 'groups/group_list.html', {'groups': groups})
@@ -106,3 +106,14 @@ def student_delete(request, pk):
     except Student.DoesNotExist:
         pass
     return redirect('student_list')
+
+
+
+
+def student_list(request):
+    query = request.GET.get('q', '')
+    if query:
+        students = Student.objects.filter(first_name__icontains=query)
+    else:
+        students = Student.objects.all()
+    return render(request, 'students/student_list.html', {'students': students, 'query': query})

@@ -11,7 +11,12 @@
         <a href="{% url 'student_list' %}" class="active">Студенты</a>
         <a href="{% url 'group_list' %}">Группы</a>
     </nav>
-
+    <div>
+    <form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="q" value="{{ query }}" placeholder="Поиск по имени...">
+    <button type="submit">Найти</button>
+</form>
+</div>
     <div class="container">
         <h1>Список студентов</h1>
         <a href="{% url 'student_create' %}" class="btn">+ Добавить студента</a>
